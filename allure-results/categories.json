@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Login Failures",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*login.*|.*Login.*|.*authentication.*"
+  },
+  {
+    "name": "Page Load Issues",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*timeout.*|.*load.*|.*navigation.*"
+  },
+  {
+    "name": "Element Not Found",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*element.*|.*selector.*|.*not found.*"
+  },
+  {
+    "name": "Browser Issues",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*browser.*|.*context.*|.*page.*closed.*"
+  },
+  {
+    "name": "Assertion Failures",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*expect.*|.*assertion.*|.*should.*"
+  }
+]

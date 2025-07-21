@@ -1,0 +1,10 @@
+{
+  "name": "Local Execution",
+  "type": "manual",
+  "url": "http://localhost",
+  "buildOrder": 1753072954886,
+  "buildName": "Test Run 21/7/2025",
+  "buildUrl": "http://localhost",
+  "reportName": "Flotorch QA Console Test Report",
+  "reportUrl": "http://localhost/allure-report"
+}

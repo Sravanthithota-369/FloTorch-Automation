@@ -1,0 +1,11 @@
+{
+  "executionDate": "2025-07-21T04:42:34.883Z",
+  "environment": "QA",
+  "browser": "Chrome",
+  "platform": "Windows",
+  "testFramework": "Cucumber + Playwright",
+  "reportFramework": "Allure",
+  "baseUrl": "https://qa-console.flotorch.cloud/",
+  "headlessMode": false,
+  "parallelExecution": false
+}
