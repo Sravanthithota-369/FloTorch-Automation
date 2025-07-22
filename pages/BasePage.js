@@ -166,17 +166,26 @@ class BasePage {
    * @param {string} description - Description for Allure report
    */
   async takeScreenshot(filename, description = null) {
-    const screenshotPath = `tests/screenshots/${filename}`;
-    await this.page.screenshot({ 
-      path: screenshotPath, 
-      fullPage: true 
-    });
-    console.log(`Screenshot saved: ${filename}`);
-    
-    // If description provided, this is for Allure reporting
-    if (description) {
-      const screenshotBuffer = await this.page.screenshot({ fullPage: true });
-      return { buffer: screenshotBuffer, path: screenshotPath, description };
+    try {
+      const screenshotPath = `tests/screenshots/${filename}`;
+      if (this.page && !this.page.isClosed()) {
+        await this.page.waitForLoadState('networkidle').catch(() => {});
+        await this.page.screenshot({ 
+          path: screenshotPath, 
+          fullPage: true 
+        });
+        console.log(`Screenshot saved: ${filename}`);
+        
+        // If description provided, this is for Allure reporting
+        if (description) {
+          const screenshotBuffer = await this.page.screenshot({ fullPage: true });
+          return { buffer: screenshotBuffer, path: screenshotPath, description };
+        }
+      } else {
+        console.log('Page is not available for screenshot');
+      }
+    } catch (error) {
+      console.log(`Failed to take screenshot: ${error.message}`);
     }
   }
 

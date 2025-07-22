@@ -126,11 +126,11 @@ class WorkspacePage extends BasePage {
    */
   async clickWorkspace(workspaceName) {
     const workspaceSelectors = [
-      `a:has-text("${workspaceName}")`,
-      `[data-testid="workspace-${workspaceName}"]`,
-      `div[role="button"]:has-text("${workspaceName}")`,
-      `.workspace-card:has-text("${workspaceName}")`
+      `//a[contains(normalize-space(),'${workspaceName}')]`
     ];
+    
+    console.log(`Attempting to click workspace: ${workspaceName}`);
+    await this.page.waitForLoadState('networkidle');
     await this.clickElement(workspaceSelectors);
     await this.page.waitForLoadState('networkidle');
     console.log(`Clicked on workspace: ${workspaceName}`);
@@ -351,6 +351,8 @@ class WorkspacePage extends BasePage {
    */
   async getNotificationText() {
     const toastTextSelectors = [
+     
+      '.toast:has-text("successfully")',
       '.toast .message',
       '.toast-message',
       '.notification-message',
@@ -364,7 +366,7 @@ class WorkspacePage extends BasePage {
       '.success-message',
       // Additional selectors for toast text
       '.toast-body',
-      '.Toastify__toast-body',
+      '.Toastify__toast-body',  
       '.toast-content',
       '.notification-content',
       '[role="alert"] div',

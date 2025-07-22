@@ -16,10 +16,7 @@ Then('I should see Providers submenu', async function() {
 });
 
 // Model Configuration Steps
-When('I click on Add Model Configuration button', async function() {
-    await this.modelsPage.clickAddModelConfigurationButton();
-    await attachScreenshotToAllure(this, 'Click_Add_Model_Configuration');
-});
+// Moved to new section
 
 When('I select {string} from the Provider dropdown', async function(provider) {
     await this.modelsPage.selectProvider(provider);
@@ -109,7 +106,18 @@ Given('I am logged in to FloTorch', async function () {
   await this.loginPage.navigateToLoginPage();
   const credentials = this.getCredentials('valid');
   await this.loginPage.login(credentials.email, credentials.password);
-  await this.dashboardPage.verifyDashboardLoaded();
+  
+  // Wait for navigation and loading to complete
+  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForTimeout(2000); // Give time for dashboard to render
+  
+  const dashboardLoaded = await this.dashboardPage.verifyDashboardLoaded();
+  if (!dashboardLoaded) {
+      console.log('Current URL:', await this.page.url());
+      console.log('Page Title:', await this.page.title());
+      throw new Error('Failed to verify dashboard is loaded after login');
+  }
+  
   await attachScreenshotToAllure(this, 'Dashboard_After_Login');
 });
 
@@ -148,6 +156,25 @@ Then('I should be on the providers page', async function () {
   expect(isOnProvidersPage).toBe(true);
   await attachScreenshotToAllure(this, 'Providers_Page_Loaded');
 });
+
+// Provider steps moved to new section
+
+// Success toast and model submenu steps moved to new section
+
+// Model steps moved to new section
+
+When('I click "Create" button for model', async function () {
+  await this.modelsPage.clickCreateButton();
+  await attachScreenshotToAllure(this, 'Click_Model_Create_Button');
+});
+
+Then('I should see another green success toast notification', async function () {
+  const isVisible = await this.modelsPage.isSuccessToastVisible();
+  expect(isVisible).toBe(true);
+  await attachScreenshotToAllure(this, 'Another_Success_Toast');
+});
+
+// Model Configuration steps moved to shared section
 
 When('I click on "Add LLM Provider" button', async function () {
   await attachScreenshotToAllure(this, 'Before_Add_LLM_Provider');
@@ -244,15 +271,14 @@ When('I click on "Add Model Configuration" button', async function () {
   await attachScreenshotToAllure(this, 'After_Add_Model_Config');
 });
 
+Then('I should see the model configuration page', async function() {
+  const isOnConfigPage = await this.modelsPage.isModelConfigurationPageVisible();
+  expect(isOnConfigPage).toBe(true);
+  await attachScreenshotToAllure(this, 'Model_Configuration_Page');
+});
+
 // Toast verification steps
 Then('I should see a green success toast notification', async function () {
-  // Wait for and get toasts using the base page method
-  await this.page.waitForTimeout(1000); // Give time for toast to appear
-  
-  // Take a screenshot of the toast
-  const toastScreenshot = await this.workspacePage.captureWorkspaceScreenshot('Success_Toast');
-  await attachScreenshotToAllure(this, toastScreenshot, 'Success Toast Notification');
-
   // Check for success using base page method
   const isSuccess = await this.workspacePage.isSuccessNotificationVisible();
   
@@ -288,9 +314,24 @@ Then('the toast should contain {string} message', async function (expectedMessag
   const hasExpectedMessage = messages.some(message => 
     message.toLowerCase().includes(expectedMessage.toLowerCase())
   );
-  
-  expect(hasExpectedMessage).toBe(true, `Expected to find message containing "${expectedMessage}" in toast notifications`);
-  console.log(`✓ Toast message verified: "${expectedMessage}"`);
+
+  switch(expectedMessage.toLowerCase()) {
+    case 'model created successfully. you can now configure it':
+      expect(hasExpectedMessage).toBe(true, `Expected to find message containing "${expectedMessage
+      }" in toast notifications`);
+      break;
+      case 'model configuration created successfully':
+      expect(hasExpectedMessage).toBe(true, `Expected to find message containing "${expectedMessage}" in toast notifications`);
+      break;
+      case 'provider created successfully':
+        expect(hasExpectedMessage).toBe(true, `Expected to find message containing "${expectedMessage}" in toast notifications`);
+        break;
+        case 'Model version published':
+          expect(hasExpectedMessage).toBe(true, `Expected to find message containing "${expectedMessage}" in toast notifications`);
+          break;
+          default:
+            expect(hasExpectedMessage).toBe(true, `Expected to find message containing "${expectedMessage}" in toast notifications`);
+      }
   
   // Take a screenshot for evidence
   const messageScreenshot = await this.workspacePage.captureWorkspaceScreenshot('Toast_Message');
@@ -321,17 +362,7 @@ Then('I should see another green success toast notification', async function () 
   console.log('✓ Additional green success toast notification verified');
 });
 
-Then('I should see the model configuration page', async function () {
-  // Verify we're on the configuration page by checking URL or page elements
-  const currentUrl = this.modelsPage.getCurrentUrl();
-  const isOnConfigPage = currentUrl.includes('/configure') || currentUrl.includes('/configuration');
-  
-  if (!isOnConfigPage) {
-    console.log('Note: Configuration page URL check failed, but this may be expected behavior');
-  }
-  
-  await attachScreenshotToAllure(this, 'Model_Configuration_Page_Loaded');
-});
+
 
 // Verification steps
 Then('I verify the provider {string} exists in the provider list', async function (providerName) {
@@ -354,4 +385,12 @@ Then('I verify the model {string} exists in the model list', async function (mod
   
   console.log(`✓ Model "${modelName}" verified in list`);
   await attachScreenshotToAllure(this, 'Model_List_Verified');
+});
+
+Then('I verify the model configuration is published and active', async function () {
+  const status = await this.modelsPage.verifyModelConfigurationStatus();
+  expect(status.isPublished && status.isActive).toBe(true);
+  
+  console.log('✓ Model configuration verified as published and active');
+  await attachScreenshotToAllure(this, 'Model_Configuration_Status_Verified');
 });
