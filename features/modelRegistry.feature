@@ -1,3 +1,4 @@
+# language: en
 Feature: Model Registry Management
   As a user of the FloTorch platform
   I want to manage models and providers in the Model Registry
