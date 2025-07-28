@@ -9,35 +9,13 @@ class WorkspacePage extends BasePage {
     
     // Workspace navigation selectors
     this.workspacesMenuSelectors = [
-      'a[href*="/workspaces"]',
-      'nav a:has-text("Workspaces")',
-      '[data-testid="workspaces-menu"]',
-      'text=Workspaces'
+      'a[href*="/admin/workspaces"]'
     ];
     
-    // Create workspace button selectors
     this.createWorkspaceButtonSelectors = [
-      'button:has-text("Create Workspace")',
-      '[data-testid="create-workspace-btn"]',
-      'button[class*="create"]',
-      '.btn:has-text("Create")'
+      '//span[text()="Create Workspace"]//ancestor::button'
     ];
     
-    // Input field selectors
-    this.workspaceNameInputSelectors = [
-      'input[name="name"]',
-      '[data-testid="workspace-name-input"]',
-      'input[placeholder*="name"]'
-    ];
-
-    this.workspaceDescriptionInputSelectors = [
-      'textarea[name="description"]',
-      'input[name="description"]',
-      '[data-testid="workspace-description"]',
-      'textarea[placeholder*="description"]'
-    ];
-    
-    // Create workspace dialog selectors
     this.createWorkspaceDialogSelectors = [
       '[role="dialog"]',
       '.modal',
@@ -47,42 +25,22 @@ class WorkspacePage extends BasePage {
     
     // Workspace name input selectors
     this.workspaceNameInputSelectors = [
-      'input[name="name"]',
-      'input[placeholder*="name"]',
-      '[data-testid="workspace-name-input"]',
-      '.modal input[type="text"]'
+      'input[name="name"]'
     ];
     
     // Workspace description input selectors
     this.workspaceDescriptionInputSelectors = [
-      'textarea[name="description"]',
-      'input[name="description"]',
-      'textarea[placeholder*="description"]',
-      '[data-testid="workspace-description-input"]'
+      'input[name="description"]'
     ];
     
     // Create button in dialog selectors
     this.createButtonSelectors = [
-      'button:has-text("Create")',
-      'button[type="submit"]:has-text("Create")',
-      '.btn:has-text("Create")',
-      '[data-testid="create-workspace-submit"]',
-      '.modal button:has-text("Create")',
-      'button.btn-primary',
-      'input[type="submit"]',
-      'button[class*="primary"]'
+      'button[type="submit"]',
     ];
     
     // Toast notification selectors
     this.toastSelectors = [
-      '.toast',
-      '.notification',
-      '.alert',
-      '[role="alert"]',
-      '.snackbar',
-      '[data-testid="toast"]',
-      '.toast-container',
-      '.notification-container'
+      '//li//div[contains(@class,"text-sm text-muted break-keep")]'
     ];
     
     // Workspace list selectors
@@ -95,10 +53,7 @@ class WorkspacePage extends BasePage {
     
     // Close dialog selectors
     this.closeDialogSelectors = [
-      'button[aria-label="Close"]',
-      '.modal-close',
-      'button:has-text("×")',
-      '[data-testid="close-modal"]'
+      'button[aria-label="Close"]'
     ];
   }
 
@@ -108,6 +63,7 @@ class WorkspacePage extends BasePage {
   async navigateToWorkspaces() {
     await this.clickElement(this.workspacesMenuSelectors);
     await this.page.waitForLoadState('networkidle');
+    await this.page.waitForTimeout(3000);
     console.log('Navigated to workspaces page');
   }
 
@@ -116,7 +72,7 @@ class WorkspacePage extends BasePage {
    */
   async clickCreateWorkspace() {
     await this.clickElement(this.createWorkspaceButtonSelectors);
-    await this.page.waitForTimeout(300); // Wait for dialog to appear (reduced from 1000ms)
+    await this.page.waitForTimeout(3000); // Increased wait time for dialog animation
     console.log('Clicked create workspace button');
   }
 
@@ -126,14 +82,38 @@ class WorkspacePage extends BasePage {
    */
   async clickWorkspace(workspaceName) {
     const workspaceSelectors = [
-      `//a[contains(normalize-space(),'${workspaceName}')]`
+      `[data-testid="${workspaceName}"]`,
+      `a[href*="${workspaceName}"]`,
+      `a:has-text("${workspaceName}")`,
+      `text=${workspaceName}`,
+      `.workspace-item:has-text("${workspaceName}")`,
+      `//a[contains(normalize-space(),'${workspaceName}')]`,
+      `//a[contains(.,'${workspaceName}')]`,
+      `//tr[contains(.,'${workspaceName}')]//a`,
+      `//div[contains(@class,'workspace')]//a[contains(.,'${workspaceName}')]`
     ];
     
     console.log(`Attempting to click workspace: ${workspaceName}`);
+    
+    // Wait for page to be stable
     await this.page.waitForLoadState('networkidle');
-    await this.clickElement(workspaceSelectors);
-    await this.page.waitForLoadState('networkidle');
-    console.log(`Clicked on workspace: ${workspaceName}`);
+    await this.page.waitForTimeout(500); // Brief pause for any animations
+    
+    // Try each selector
+    for (const selector of workspaceSelectors) {
+      try {
+        await this.page.waitForSelector(selector, { timeout: 2000, state: 'visible' });
+        await this.page.click(selector);
+        console.log(`Clicked workspace using selector: ${selector}`);
+        await this.page.waitForLoadState('networkidle');
+        return;
+      } catch (error) {
+        console.log(`Failed to click with selector ${selector}: ${error.message}`);
+        continue;
+      }
+    }
+    
+    throw new Error(`Could not find clickable workspace: ${workspaceName}`);
   }
 
   /**
@@ -142,23 +122,19 @@ class WorkspacePage extends BasePage {
    * @returns {Promise<boolean>} - True if dashboard is displayed
    */
   async verifyWorkspaceDashboard(workspaceName) {
-    const dashboardSelectors = [
-      `[data-testid="workspace-dashboard-${workspaceName}"]`,
-      `h1:has-text("${workspaceName}")`,
-      `.workspace-header:has-text("${workspaceName}")`,
-      `.dashboard-title:has-text("${workspaceName}")`
-    ];
-
-    for (const selector of dashboardSelectors) {
-      try {
-        await this.page.waitForSelector(selector, { timeout: 5000 });
-        console.log(`Workspace dashboard verified with selector: ${selector}`);
+    const selector = `//h1[contains(text(),'${workspaceName}')]`;
+    try {
+      await this.page.waitForSelector(selector, { timeout: 2000 });
+      if (await this.isElementVisible(selector)) {
+        console.log(`Workspace dashboard is visible with: ${workspaceName}`);
         return true;
-      } catch (error) {
-        continue;
       }
+      console.warn(`Element found but not visible for workspace: ${workspaceName}`);
+      return false;
+    } catch (error) {
+      console.warn(`Workspace dashboard not found for: ${workspaceName}`);
+      return false;
     }
-    return false;
   }
 
   /**
@@ -168,12 +144,12 @@ class WorkspacePage extends BasePage {
    */
   async fillWorkspaceDetails(name, description = '') {
     // Fill workspace name
-    await this.fillInput(this.workspaceNameInputSelectors, name);
+    await this.fillInput(this.workspaceNameInputSelectors[0], name);
     console.log(`Filled workspace name: ${name}`);
     
     // Fill description if provided
     if (description) {
-      await this.fillInput(this.workspaceDescriptionInputSelectors, description);
+      await this.fillInput(this.workspaceDescriptionInputSelectors[0], description);
       console.log(`Filled workspace description: ${description}`);
     }
   }
@@ -182,22 +158,8 @@ class WorkspacePage extends BasePage {
    * Submit workspace creation
    */
   async submitWorkspaceCreation() {
-    // First, let's try to find what buttons are available
-    try {
-      const allButtons = await this.page.$$('button');
-      console.log(`Found ${allButtons.length} buttons on the page`);
-      
-      for (let i = 0; i < allButtons.length; i++) {
-        const buttonText = await allButtons[i].textContent();
-        const buttonClass = await allButtons[i].getAttribute('class');
-        const buttonType = await allButtons[i].getAttribute('type');
-        console.log(`Button ${i}: text="${buttonText}", class="${buttonClass}", type="${buttonType}"`);
-      }
-    } catch (error) {
-      console.log('Could not enumerate buttons:', error.message);
-    }
     
-    await this.clickElement(this.createButtonSelectors);
+    await this.clickElement(this.createButtonSelectors[0]);
     console.log('Submitted workspace creation');
   }
 
@@ -220,56 +182,23 @@ class WorkspacePage extends BasePage {
    * Check for toast notifications
    * @returns {Array} Array of toast messages
    */
-  async captureToastNotifications() {
-    const toasts = [];
-    
-    for (const selector of this.toastSelectors) {
-      try {
-        await this.page.waitForSelector(selector, { timeout: 3000 });
-        const toastElements = await this.page.$$(selector);
-        
-        for (const toast of toastElements) {
-          const text = await toast.textContent();
-          if (text && text.trim()) {
-            toasts.push(text.trim());
-            console.log(`Toast notification captured: ${text.trim()}`);
-          }
-        }
-        
-        break; // If we found toasts with this selector, no need to try others
-      } catch (error) {
-        // Try next selector
-        continue;
-      }
-    }
-    
-    if (toasts.length === 0) {
-      console.log('No toast notifications found');
-    }
-    
-    return toasts;
-  }
+  async captureToastNotifications(expectedText) {
+  try {
+    await this.page.waitForSelector(this.toastSelectors, { timeout: 3000 });
+    const toast = await this.page.$(this.toastSelectors);
 
-  /**
-   * Wait for and capture any toast notifications
-   * @param {number} timeoutMs - How long to wait for toasts
-   * @returns {Array} Array of toast messages
-   */
-  async waitForToastNotifications(timeoutMs = 5000) {
-    console.log('Waiting for toast notifications...');
-    
-    try {
-      // Wait for any toast to appear
-      await this.page.waitForSelector(this.toastSelectors.join(', '), { timeout: timeoutMs });
-      
-      // Wait a bit more for all toasts to load (reduced from 1000ms)
-      await this.page.waitForTimeout(500);
-      
-      return await this.captureToastNotifications();
-    } catch (error) {
-      console.log('No toast notifications appeared within timeout');
-      return [];
+    if (toast) {
+      const text = await toast.textContent();
+      if (text && text.trim() === expectedText) {
+        console.log(`Toast notification captured successfully: ${text.trim()}`);
+      }
+      return [text.trim()];
     }
+    return [];
+  } catch (error) {
+    console.warn(`Failed to capture toast notification: ${error.message}`);
+    return [];
+  }
   }
 
   /**
@@ -278,31 +207,22 @@ class WorkspacePage extends BasePage {
    * @returns {boolean} True if workspace exists
    */
   async verifyWorkspaceExists(workspaceName) {
-    try {
-      // Try different approaches to find the workspace
+
       const workspaceSelectors = [
-        `text=${workspaceName}`,
-        `[data-workspace="${workspaceName}"]`,
-        `.workspace-item:has-text("${workspaceName}")`,
-        `tr:has-text("${workspaceName}")`
+        `//span[text()='${workspaceName}']`,
       ];
       
-      for (const selector of workspaceSelectors) {
         try {
-          await this.page.waitForSelector(selector, { timeout: 3000 });
+          await this.page.waitForSelector(workspaceSelectors, { timeout: 2000 });
+
+          if( await this.isElementVisible(workspaceSelectors)) {
           console.log(`Workspace "${workspaceName}" found in list`);
           return true;
-        } catch (error) {
-          continue;
-        }
+          }
+      } catch (error) {
+        console.warn(`Workspace "${workspaceName}" not found in list: ${error.message}`);
+        return false;
       }
-      
-      console.log(`Workspace "${workspaceName}" not found in list`);
-      return false;
-    } catch (error) {
-      console.log(`Error verifying workspace existence: ${error.message}`);
-      return false;
-    }
   }
 
   /**

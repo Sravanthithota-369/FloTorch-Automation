@@ -9,39 +9,13 @@ class DashboardPage extends BasePage {
     
     // Common dashboard element selectors
     this.dashboardSelectors = [
-      '[data-testid="dashboard"]',
-      '.dashboard',
-      '#dashboard',
-      '.main-content',
-      '.home',
-      'main',
-      '[role="main"]'
+      '.home'
     ];
 
     this.headerSelectors = [
-      'header',
-      '.header',
-      '.navbar',
-      '.top-bar',
-      '[data-testid="header"]'
+   '//h1[text()="Dashboard"]'
     ];
 
-    this.userMenuSelectors = [
-      '.user-menu',
-      '.profile-menu',
-      '.account-menu',
-      '[data-testid="user-menu"]',
-      '.dropdown-toggle'
-    ];
-
-    this.logoutSelectors = [
-      'button:has-text("Logout")',
-      'button:has-text("Sign Out")',
-      'a:has-text("Logout")',
-      'a:has-text("Sign Out")',
-      '[data-testid="logout"]',
-      '.logout'
-    ];
   }
 
   /**
@@ -49,23 +23,16 @@ class DashboardPage extends BasePage {
    * @returns {Promise<boolean>} True if on dashboard, false otherwise
    */
   async isDashboardVisible() {
-    console.log('Checking if dashboard is visible...');
+  
+      if (await this.isElementVisible(this.dashboardSelectors)) {
+        console.log("Dashboard section is visible");
+        return true;
+      }
     
-    // Check for dashboard elements
-    for (const selector of this.dashboardSelectors) {
-      if (await this.isElementVisible(selector)) {
-        console.log(`Dashboard found with selector: ${selector}`);
+      if(await this.isElementVisible(this.headerSelectors)) {
+        console.log("Dashboard header is visible");
         return true;
       }
-    }
-
-    // Check for header elements (common in dashboards)
-    for (const selector of this.headerSelectors) {
-      if (await this.isElementVisible(selector)) {
-        console.log(`Header found with selector: ${selector}`);
-        return true;
-      }
-    }
 
     console.log('Dashboard not visible');
     return false;
@@ -91,86 +58,80 @@ class DashboardPage extends BasePage {
    * @returns {Promise<boolean>} True if dashboard loaded successfully
    */
   async verifyDashboardLoaded() {
-    console.log('Verifying dashboard page loaded...');
     
-    //await this.wait(500);
-    
-    // Check if dashboard is visible
-    //const isDashboard = await this.isDashboardVisible();
-    
+    await this.wait(500);
+     const isDashboard = await this.isDashboardVisible();
+    if (!isDashboard) { 
+      console.log('Dashboard page did not load successfully');
+      return false;
+    }
+
     // Get page title
     const title = await this.getDashboardTitle();
     console.log(`Page title: ${title}`);
     // Check if title contains "Dashboard" or similar
     if (title.toLowerCase().includes('dashboard') || title.toLowerCase().includes ('home')) {
-      console.log('Dashboard page loaded successfully');
+      console.log('Dashboard Title matches expected');
       return true;
     }
-    // if (isDashboard) {
-    //   console.log('Dashboard page loaded successfully');
-    //   return true;
-    // } else {
-    //   console.log('Dashboard page did not load successfully');
-    //   return false;
-    // }
   }
 
   /**
    * Click logout button
    */
-  async logout() {
-    console.log('Attempting to logout...');
+  // async logout() {
+  //   console.log('Attempting to logout...');
     
-    try {
-      // First try to find and click user menu if it exists
-      for (const selector of this.userMenuSelectors) {
-        if (await this.isElementVisible(selector)) {
-          await this.clickElement(selector);
-          console.log(`Clicked user menu with selector: ${selector}`);
-          await this.wait(300); // Wait for menu to open (reduced from 1000ms)
-          break;
-        }
-      }
+  //   try {
+  //     // First try to find and click user menu if it exists
+  //     for (const selector of this.userMenuSelectors) {
+  //       if (await this.isElementVisible(selector)) {
+  //         await this.clickElement(selector);
+  //         console.log(`Clicked user menu with selector: ${selector}`);
+  //         await this.wait(300); // Wait for menu to open (reduced from 1000ms)
+  //         break;
+  //       }
+  //     }
 
-      // Then click logout
-      await this.clickElement(this.logoutSelectors);
-      await this.waitForNavigation();
-      console.log('Logout successful');
+  //     // Then click logout
+  //     await this.clickElement(this.logoutSelectors);
+  //     await this.waitForNavigation();
+  //     console.log('Logout successful');
       
-    } catch (error) {
-      console.log('Logout failed or not available:', error.message);
-      throw new Error('Could not find logout option');
-    }
-  }
+  //   } catch (error) {
+  //     console.log('Logout failed or not available:', error.message);
+  //     throw new Error('Could not find logout option');
+  //   }
+  // }
 
-  /**
-   * Get user information if available
-   * @returns {Promise<string|null>} User information or null
-   */
-  async getUserInfo() {
-    const userInfoSelectors = [
-      '.user-name',
-      '.username',
-      '.user-email',
-      '[data-testid="user-info"]',
-      '.profile-name'
-    ];
+  // /**
+  //  * Get user information if available
+  //  * @returns {Promise<string|null>} User information or null
+  //  */
+  // async getUserInfo() {
+  //   const userInfoSelectors = [
+  //     '.user-name',
+  //     '.username',
+  //     '.user-email',
+  //     '[data-testid="user-info"]',
+  //     '.profile-name'
+  //   ];
 
-    for (const selector of userInfoSelectors) {
-      try {
-        if (await this.isElementVisible(selector)) {
-          const userInfo = await this.getElementText(selector);
-          console.log(`User info found: ${userInfo}`);
-          return userInfo;
-        }
-      } catch (error) {
-        continue;
-      }
-    }
+  //   for (const selector of userInfoSelectors) {
+  //     try {
+  //       if (await this.isElementVisible(selector)) {
+  //         const userInfo = await this.getElementText(selector);
+  //         console.log(`User info found: ${userInfo}`);
+  //         return userInfo;
+  //       }
+  //     } catch (error) {
+  //       continue;
+  //     }
+  //   }
 
-    console.log('No user information found');
-    return null;
-  }
+  //   console.log('No user information found');
+  //   return null;
+  // }
 }
 
 module.exports = DashboardPage;

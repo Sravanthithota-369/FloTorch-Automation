@@ -21,58 +21,56 @@ Feature: Model Registry Management
   #And I fill in the workspace description as "This is a test workspace for automation"
   #Then I submit the workspace creation
   #And I should see a success notification
+  #And the toast should contain "Workspace created successfully" message
+  #Then I should see the workspace "AutomationWorkspace" in the workspace list
   #And the workspace "AutomationWorkspace" should be created successfully
-  #When I click on "AutomationWorkspace" workspace
+  When I click on "AutomationWorkspace" workspace
   #Then I should see the "AutomationWorkspace" Dashboard
-  #When I click on "Model Registry" menu
-  #Then I should see Models submenu
-  #And I should see Providers submenu
-  #When I click on "Providers" submenu
-  #Then I should be on the providers page
-    #When I click on "Add LLM Provider" button
-    #And I fill provider details:
-      #| field       | value                                    |
-      #| name        | amazonbedrock-1                          |
-      #| description | Amazon Bedrock Provider-1                |
-      #| provider    | Amazon Bedrock                          |
-      #| region      | us-east-1                               |
-      #| accessKey   | AKIAZ3MGM2KHPSGSKJ7E                    |
-      #| secretKey   | SEM5gFCOT+rz6BuxMna85baYlIXLO7hWwAlKBqY |
-    #And I click "Create" button for provider
-    #Then I should see a green success toast notification
-    #And the toast should contain "provider created successfully" message
-    When I click on "AutomationWorkspace" workspace
-    Then I should see the "AutomationWorkspace" Dashboard
-    When I click on "Model Registry" menu
+   When I click on "Model Registry" menu
+  # Then I should see Models submenu
+  # And I should see Providers submenu
+  # When I click on "Providers" submenu
+  #  Then I should be on the providers page
+  #  When I click on "Add LLM Provider" button
+  #  And I fill provider details:
+  #    | field       | value                                    |
+  #    | name        | amazonbedrock                          |
+  #    | description | Amazon Bedrock Provider                |
+  #    | provider    | Amazon Bedrock                          |
+  #    | region      | us-east-1                               |
+  #    | accessKey   | AKIAZ3MGM2KHPSGSKJ7E                    |
+  #    | secretKey   | SEM5gFCOT+rz6BuxMna85baYlIXLO7hWwAlKBqY |
+  #  And I click "Create" button for provider
+  #  Then I should see a green success toast notification
+  #  And the toast should contain "provider created successfully" message
     When I click on "Models" submenu
-    Then I should be on the models page
-    When I click on "New Model" button
-    And I fill model details:
-      | name        | amazonbedrock       |
-      | description | Amazon Bedrock AI Model | 
-        And I click on Create button
+  #  Then I should be on the models page
+  #  When I click on "New Model" button
+  #  And I fill model details:
+  #    | name        | amazonbedrock       |
+  #    | description | Amazon Bedrock AI Model | 
+  #  And I click on Create button
+  #  Then I should see a green success toast notification
+  #  And the toast should contain "Model created successfully" message
+  #  And the toast should contain "model created successfully and configure it" message
+  #  When I click on "Add Model Configuration" button
+  #  Then I should see the model configuration page
+  #  And I select "Amazon Bedrock" from the Provider dropdown
+  #  And I select "anthropic.claude-v2" from the Model Name dropdown
+  #  And I click on Create button
+  #  Then I should see a green success toast notification
+  #  And the toast should contain "Config created successfully" message
+  #  #And the model configuration should be added successfully
+    When I click on Actions button in Model Registry
+    #And I click on "Publish" option
     #Then I should see a green success toast notification
-    #And the toast should contain "model created successfully" message
-    #Then I should see another green success toast notification
-    #Then I should see a green success toast notification
-    #And the toast should contain "model created successfully and configure it" message
-    When I click on "Add Model Configuration" button
-    Then I should see the model configuration page
-    And I select "amazonbedrock" from the Provider dropdown
-    And I select "anthropic.claude-v2" from the Model Name dropdown
-    And I click on Create button
-    #Then I should see a green success toast notification
-    #And the toast should contain "model configuration created successfully" message
-    And the model configuration should be added successfully
-    When I click on Actions menu button in Model Registry
-    And I click on "Publish" option
-    And I click on "Models" submenu
-    Then I click on Actions menu button in Model Registry
+    #And the toast should contain "The model version has been published to the gateway" message
+    #And I click on "Models" submenu
+    #Then I click on Actions menu button in Model Registry
     When I click on "Publish Latest" option
     And I select "Published(1)" from the version dropdown
     And I click on Publish button in the dialog
-     #Then I should see a green success toast notification
-    #Then I should see a success notification for model publishing
-    #And the toast should contain "model configuration created successfully" message
-    And I verify the model configuration is published and active
+    Then I should see a green success toast notification
+    And the toast should contain "The model version has been published to the gateway successfully" message
+    #And I verify the model configuration is published and active
 

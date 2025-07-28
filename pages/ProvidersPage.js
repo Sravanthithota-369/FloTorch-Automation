@@ -17,10 +17,7 @@ class ProvidersPage extends BasePage {
     
     // Add LLM Provider button selectors
     this.addLLMProviderButtonSelectors = [
-      'button:has-text("Add LLM Provider")',
-      '[data-testid="add-llm-provider-btn"]',
-      'button:has-text("+ Add LLM Provider")',
-      '.btn:has-text("Add LLM Provider")'
+      '//span[text()="Add LLM Provider"]//ancestor::button'
     ];
     
     // Provider creation dialog selectors
@@ -33,19 +30,12 @@ class ProvidersPage extends BasePage {
     
     // Provider name input selectors
     this.providerNameInputSelectors = [
-      'input[name="name"]',
-      'input[placeholder*="name" i]',
-      '[data-testid="provider-name-input"]',
-      '.modal input[type="text"]',
-      'input[type="text"]'
+      'input[name="name"]'
     ];
     
     // Provider description input selectors
     this.providerDescriptionInputSelectors = [
-      'textarea[name="description"]',
       'input[name="description"]',
-      'textarea[placeholder*="description" i]',
-      '[data-testid="provider-description-input"]'
     ];
     
     // Provider dropdown selectors
@@ -60,73 +50,22 @@ class ProvidersPage extends BasePage {
     
     // Region input selectors - updated to match actual field names
     this.regionInputSelectors = [
-      'input[name="options.region"]',
-      'input[id="v-1-6-0"]',
-      'input[name="region"]',
-      'input[placeholder*="region" i]',
-      'input[placeholder*="aws" i]',
-      '[data-testid="region-input"]',
-      'input[name="aws_region"]',
-      'input[id="region"]',
-      'input[id*="region"]',
-      'select[name="region"]',
-      'input[label*="region" i]',
-      '.region input',
-      '#region',
-      'input[placeholder*="us-" i]',
-      'input[class*="region"]'
+      'input[name="options.region"]'
     ];
     
     // Access Key ID input selectors - updated to match actual field names
     this.accessKeyInputSelectors = [
       'input[name="options.accessKeyId"]',
-      'input[id="v-1-6-1"]',
-      'input[name="accessKey"]',
-      'input[name="accessKeyId"]',
-      'input[name="access_key"]',
-      'input[placeholder*="access" i]',
-      'input[placeholder*="key" i]',
-      'input[placeholder*="AKIA" i]',
-      'input[name="aws_access_key_id"]',
-      '[data-testid="access-key-input"]',
-      'input[id="accessKey"]',
-      'input[id="access-key"]',
-      'input[id*="access"]',
-      '.access-key input',
-      '#accessKey',
-      'input[class*="access"]'
     ];
     
     // Secret Access Key input selectors - updated to match actual field names
     this.secretKeyInputSelectors = [
-      'input[name="options.secrets.secretAccessKey"]',
-      'input[id="v-1-6-2"]',
-      'input[name="secretKey"]',
-      'input[name="secretAccessKey"]',
-      'input[name="secret_key"]',
-      'input[placeholder*="secret" i]',
-      'input[placeholder*="access" i]:not([placeholder*="key" i])',
-      'input[name="aws_secret_access_key"]',
-      '[data-testid="secret-key-input"]',
-      'input[id="secretKey"]',
-      'input[id="secret-key"]',
-      'input[id*="secret"]',
-      '.secret-key input',
-      '#secretKey',
-      'input[type="password"]',
-      'input[class*="secret"]'
+      'input[name="options.secrets.secretAccessKey"]'
     ];
     
     // Create button in dialog selectors
     this.createButtonSelectors = [
-      'button:has-text("Create")',
-      'button[type="submit"]:has-text("Create")',
-      '.btn:has-text("Create")',
-      '[data-testid="create-provider-submit"]',
-      '.modal button:has-text("Create")',
-      'button.btn-primary',
-      'input[type="submit"]',
-      'button[class*="primary"]'
+      'button[type="submit"]',
     ];
     
     // Toast notification selectors (green success toasts)
@@ -186,40 +125,15 @@ class ProvidersPage extends BasePage {
    */
   async fillProviderDetails(providerData) {
     const { name, description, provider, region, accessKey, secretKey } = providerData;
-    
-    console.log('=== PROVIDER FORM DEBUG INFO ===');
-    
-    // Debug: Show all form elements when dialog opens
-    try {
-      const allElements = await this.page.locator('input, select, textarea, button').all();
-      console.log(`Found ${allElements.length} form elements in provider dialog:`);
-      
-      for (let i = 0; i < Math.min(allElements.length, 15); i++) {
-        const element = allElements[i];
-        const tagName = await element.evaluate(el => el.tagName);
-        const name = await element.getAttribute('name') || 'no-name';
-        const placeholder = await element.getAttribute('placeholder') || 'no-placeholder';
-        const type = await element.getAttribute('type') || 'no-type';
-        const id = await element.getAttribute('id') || 'no-id';
-        const className = await element.getAttribute('class') || 'no-class';
-        const isVisible = await element.isVisible();
-        console.log(`  ${i}: ${tagName} - name="${name}", placeholder="${placeholder}", type="${type}", id="${id}", class="${className.substring(0, 50)}", visible=${isVisible}`);
-      }
-    } catch (error) {
-      console.log('Could not enumerate form elements:', error.message);
-    }
-    
-    console.log('=== END DEBUG INFO ===');
-    
-    // Fill provider name
+       
     if (name) {
-      await this.fillInput(this.providerNameInputSelectors, name);
+      await this.fillInput(this.providerNameInputSelectors[0], name);
       console.log(`Filled provider name: ${name}`);
     }
     
     // Fill description if provided
     if (description) {
-      await this.fillInput(this.providerDescriptionInputSelectors, description);
+      await this.fillInput(this.providerDescriptionInputSelectors[0], description);
       console.log(`Filled provider description: ${description}`);
     }
     
@@ -233,31 +147,25 @@ class ProvidersPage extends BasePage {
         console.log('Clicked provider dropdown button using XPath: //div[@class=\'mt-1 relative\']//button');
         await this.page.waitForTimeout(1000); // Wait for dropdown to open
         
-        // After clicking the dropdown, look for the provider options
-        const providerOptionSelectors = [
-          `text="${provider}"`,
-          `[role="option"]:has-text("${provider}")`,
-          `li:has-text("${provider}")`,
-          `div:has-text("${provider}")`,
-          `span:has-text("${provider}")`,
-          `button:has-text("${provider}")`,
-          `option:has-text("${provider}")`,
-          `[data-value*="${provider.toLowerCase()}"]`,
-          `.dropdown-item:has-text("${provider}")`,
-          `.option:has-text("${provider}")`
-        ];
+        // After clicking the dropdown, look for the provider options with text
+        const elements = await this.page.locator(`//div[@role='option']`).all();
+        console.log(`Found ${elements.length} provider options`);
         
         let selected = false;
-        for (const optionSelector of providerOptionSelectors) {
+        for (const element of elements) {
           try {
-            console.log(`Trying to find option with selector: ${optionSelector}`);
-            await this.page.waitForSelector(optionSelector, { timeout: 3000 });
-            await this.page.click(optionSelector);
-            console.log(`Selected provider "${provider}" using selector: ${optionSelector}`);
-            selected = true;
-            break;
+            const text = await element.textContent();
+            console.log(`Checking option with text: ${text}`);
+            
+            if (text && text.includes(provider)) {
+              console.log(`Found matching provider option: ${text}`);
+              await element.click();
+              console.log(`Selected provider "${provider}"`);
+              selected = true;
+              break;
+            }
           } catch (e) {
-            console.log(`Could not find/click option with selector: ${optionSelector}`);
+            console.log(`Error checking/clicking provider option: ${e.message}`);
             continue;
           }
         }
@@ -269,182 +177,40 @@ class ProvidersPage extends BasePage {
         console.log(`Successfully selected provider: ${provider}`);
       } catch (error) {
         console.log(`Failed to select provider using direct approach, trying fallback methods: ${error.message}`);
-        
-        // Fallback: Manual provider selection
-        let selected = false;
-        
-        // First, try to find and click the select element directly
-        for (const selector of this.providerDropdownSelectors) {
-          try {
-            await this.page.waitForSelector(selector, { timeout: 2000 });
-            
-            if (selector.includes('select')) {
-              // For traditional select elements
-              await this.page.selectOption(selector, { label: provider });
-              console.log(`Selected provider "${provider}" from select element: ${selector}`);
-              selected = true;
-              break;
-            } else if (selector.includes('input')) {
-              // For searchable dropdowns
-              await this.page.click(selector);
-              await this.page.waitForTimeout(500);
-              await this.page.fill(selector, '');
-              await this.page.type(selector, provider);
-              await this.page.waitForTimeout(1000);
-              
-              // Try to click the option that appears
-              const optionSelectors = [
-                `[role="option"]:has-text("${provider}")`,
-                `li:has-text("${provider}")`,
-                `div:has-text("${provider}")`,
-                `option:has-text("${provider}")`
-              ];
-              
-              for (const optionSelector of optionSelectors) {
-                try {
-                  await this.page.waitForSelector(optionSelector, { timeout: 2000 });
-                  await this.page.click(optionSelector);
-                  console.log(`Selected provider "${provider}" from searchable dropdown option: ${optionSelector}`);
-                  selected = true;
-                  break;
-                } catch (e) {
-                  continue;
-                }
-              }
-              
-              if (selected) break;
-              
-              // Try pressing Enter as fallback
-              try {
-                await this.page.press(selector, 'Enter');
-                console.log(`Selected provider "${provider}" by pressing Enter`);
-                selected = true;
-                break;
-              } catch (e) {
-                console.log(`Could not select by pressing Enter`);
-              }
-            } else {
-              // For button/other clickable elements
-              await this.page.click(selector);
-              await this.page.waitForTimeout(500);
-              
-              // Try to find and click the provider option
-              const providerOptionSelectors = [
-                `text="${provider}"`,
-                `[role="option"]:has-text("${provider}")`,
-                `li:has-text("${provider}")`,
-                `div:has-text("${provider}")`,
-                `option:has-text("${provider}")`
-              ];
-              
-              for (const optionSelector of providerOptionSelectors) {
-                try {
-                  await this.page.waitForSelector(optionSelector, { timeout: 2000 });
-                  await this.page.click(optionSelector);
-                  console.log(`Selected provider "${provider}" after clicking dropdown: ${optionSelector}`);
-                  selected = true;
-                  break;
-                } catch (e) {
-                  continue;
-                }
-              }
-              
-              if (selected) break;
-            }
-          } catch (e) {
-            console.log(`Could not use dropdown selector: ${selector}, error: ${e.message}`);
-            continue;
-          }
-        }
-        
-        if (!selected) {
-          throw new Error(`Could not select provider: ${provider}`);
-        }
-      }
-      
-      // Wait for provider-specific fields to appear after selection
-      let awsFieldsFound = false;
-      for (let attempt = 0; attempt < 3; attempt++) {
-        await this.page.waitForTimeout(1500); // Wait longer for fields to load
-        
-        // Check for AWS-specific fields using the actual field names we know exist
-        const regionField = await this.page.locator('input[name="options.region"]').count();
-        const accessField = await this.page.locator('input[name="options.accessKeyId"]').count();
-        const secretField = await this.page.locator('input[name="options.secrets.secretAccessKey"]').count();
-        
-        console.log(`Attempt ${attempt + 1}: Region fields: ${regionField}, Access fields: ${accessField}, Secret fields: ${secretField}`);
-        
-        if (regionField > 0 && accessField > 0 && secretField > 0) {
-          console.log('All AWS-specific fields detected!');
-          awsFieldsFound = true;
-          break;
-        } else if (attempt < 2) {
-          console.log(`Waiting for AWS fields to appear... (${regionField + accessField + secretField}/3 fields found)`);
-        }
-      }
-      
-      // Debug: Check all input fields after waiting
-      const allInputsAfter = await this.page.locator('input').all();
-      console.log(`Found ${allInputsAfter.length} input elements after provider selection`);
-      
-      for (let i = 0; i < Math.min(allInputsAfter.length, 10); i++) {
-        const name = await allInputsAfter[i].getAttribute('name').catch(() => 'no-name');
-        const placeholder = await allInputsAfter[i].getAttribute('placeholder').catch(() => 'no-placeholder');
-        const id = await allInputsAfter[i].getAttribute('id').catch(() => 'no-id');
-        console.log(`Input ${i}: name="${name}", placeholder="${placeholder}", id="${id}"`);
-      }
-      
-      if (!awsFieldsFound) {
-        console.log('Warning: AWS-specific fields not found after provider selection');
       }
     }
-    
     // Fill region
     if (region) {
       try {
-        // Debug: List all input fields on the page
-        const allInputs = await this.page.locator('input').all();
-        console.log(`Found ${allInputs.length} input elements on the page`);
-        
-        for (let i = 0; i < Math.min(allInputs.length, 10); i++) {
-          const name = await allInputs[i].getAttribute('name').catch(() => 'no-name');
-          const placeholder = await allInputs[i].getAttribute('placeholder').catch(() => 'no-placeholder');
-          const id = await allInputs[i].getAttribute('id').catch(() => 'no-id');
-          console.log(`Input ${i}: name="${name}", placeholder="${placeholder}", id="${id}"`);
-        }
-        
-        await this.fillInput(this.regionInputSelectors, region);
+        await this.page.waitForSelector(this.regionInputSelectors[0], { timeout: 3000 });
+        await this.fillInput(this.regionInputSelectors[0], region);
         console.log(`Filled region: ${region}`);
       } catch (error) {
         console.log(`Failed to fill region: ${error.message}`);
-        // Let's try to continue without region for now
-        console.log('Continuing without region...');
       }
     }
     
     // Fill access key
     if (accessKey) {
       try {
-        await this.fillInput(this.accessKeyInputSelectors, accessKey);
+        await this.fillInput(this.accessKeyInputSelectors[0], accessKey);
         console.log(`Filled access key: ${accessKey.substring(0, 8)}...`);
       } catch (error) {
         console.log(`Failed to fill access key: ${error.message}`);
-        console.log('Continuing without access key...');
       }
     }
     
     // Fill secret key
     if (secretKey) {
       try {
-        await this.fillInput(this.secretKeyInputSelectors, secretKey);
+        await this.fillInput(this.secretKeyInputSelectors[0], secretKey);
         console.log(`Filled secret key: ${secretKey.substring(0, 8)}...`);
       } catch (error) {
         console.log(`Failed to fill secret key: ${error.message}`);
-        console.log('Continuing without secret key...');
+      }
       }
     }
-  }
-
+  
   /**
    * Select option from dropdown
    * @param {Array} selectors - Dropdown selectors
@@ -563,22 +329,8 @@ class ProvidersPage extends BasePage {
    * Submit provider creation
    */
   async submitProviderCreation() {
-    // Debug: Check available buttons
-    try {
-      const allButtons = await this.page.$$('button');
-      console.log(`Found ${allButtons.length} buttons on the page`);
-      
-      for (let i = 0; i < allButtons.length; i++) {
-        const buttonText = await allButtons[i].textContent();
-        const buttonClass = await allButtons[i].getAttribute('class');
-        const buttonType = await allButtons[i].getAttribute('type');
-        console.log(`Button ${i}: text="${buttonText}", class="${buttonClass}", type="${buttonType}"`);
-      }
-    } catch (error) {
-      console.log('Could not enumerate buttons:', error.message);
-    }
-    
-    await this.clickElement(this.createButtonSelectors);
+    await this.page.waitForSelector(this.createButtonSelectors[0], { timeout: 1000 });
+    await this.clickElement(this.createButtonSelectors[0]);
     console.log('Submitted provider creation');
   }
 

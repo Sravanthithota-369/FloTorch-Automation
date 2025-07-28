@@ -25,29 +25,17 @@ class ExperimentDashboardPage extends BasePage {
     
     // Model Registry menu selectors
     this.modelRegistryMenuSelectors = [
-      'text=Model Registry',
-      'a:has-text("Model Registry")',
-      '.sidebar *:has-text("Model Registry")',
-      '[data-testid="model-registry-menu"]',
-      'nav a[href*="model-registry"]',
-      '.side-nav a:has-text("Model Registry")',
-      '.navigation a:has-text("Model Registry")'
+      'button:has-text("Model Registry")'
     ];
     
     // Models submenu selectors
     this.modelsSubmenuSelectors = [
       'a:has-text("Models")',
-      '[data-testid="models-menu"]',
-      'nav a[href*="models"]',
-      '.sidebar a:has-text("Models")'
     ];
     
     // Providers submenu selectors
     this.providersSubmenuSelectors = [
-      'a:has-text("Providers")',
-      '[data-testid="providers-menu"]',
-      'nav a[href*="providers"]',
-      '.sidebar a:has-text("Providers")'
+      '//span[text()="Providers"]//ancestor::a'
     ];
     
     // Dashboard elements selectors
@@ -145,45 +133,36 @@ class ExperimentDashboardPage extends BasePage {
    * Click on Model Registry in the sidebar
    */
   async clickModelRegistry() {
-    // First, let's debug what's available in the sidebar
     try {
-      const sidebarElements = await this.page.$$('.sidebar *, nav *, [role="navigation"] *');
-      console.log(`Found ${sidebarElements.length} elements in navigation areas`);
+      const modelRegistrySelector = this.modelRegistryMenuSelectors[0];
       
-      // Get text content of navigation elements
-      for (let i = 0; i < Math.min(sidebarElements.length, 10); i++) {
-        try {
-          const text = await sidebarElements[i].textContent();
-          const tagName = await sidebarElements[i].evaluate(node => node.tagName);
-          if (text && text.trim()) {
-            console.log(`Nav element ${i}: ${tagName} - "${text.trim()}"`);
-          }
-        } catch (error) {
-          continue;
-        }
-      }
+      // Wait for Model Registry button to be visible and clickable
+      await this.page.waitForSelector(modelRegistrySelector, { 
+        state: 'visible',
+        timeout: 5000 
+      });
+      console.log(`Found Model Registry menu button with selector: ${modelRegistrySelector}`);
+
+      // Take screenshot before clicking
+      await this.captureScreenshotForAllure('Before_Model_Registry_Click');
+
+      // Click the Model Registry button
+      await this.page.click(modelRegistrySelector);
+      console.log('Clicked Model Registry menu button');
+
+      // Wait for submenu animation
+      await this.page.waitForTimeout(1000);
+
+      // Take screenshot after clicking
+      await this.captureScreenshotForAllure('After_Model_Registry_Click');
       
-      // Look for any element containing "Model" text
-      const modelElements = await this.page.$$('*:has-text("Model")');
-      console.log(`Found ${modelElements.length} elements containing "Model"`);
-      
-      for (let i = 0; i < Math.min(modelElements.length, 5); i++) {
-        try {
-          const text = await modelElements[i].textContent();
-          const tagName = await modelElements[i].evaluate(node => node.tagName);
-          console.log(`Model element ${i}: ${tagName} - "${text?.trim()}"`);
-        } catch (error) {
-          continue;
-        }
-      }
     } catch (error) {
-      console.log('Could not debug sidebar elements:', error.message);
+      console.error(`Failed to click Model Registry menu: ${error.message}`);
+      throw error; // Re-throw to handle in test
     }
-    
-    await this.clickElement(this.modelRegistryMenuSelectors);
-    await this.page.waitForTimeout(300); // Wait for any submenu to expand (reduced from 1000ms)
-    console.log('Clicked on Model Registry menu');
   }
+      
+  
 
   /**
    * Click on Models submenu

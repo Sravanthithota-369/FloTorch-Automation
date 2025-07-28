@@ -83,51 +83,22 @@ When('I fill in the workspace name as {string}', async function (workspaceName) 
   this.attach(`Filling workspace name: ${workspaceName}`, 'text/plain');
   this.workspaceNameToCreate = workspaceName; // Store for later verification
   
-  // Take screenshot before filling name
-  const beforeScreenshot = await this.workspacePage.captureWorkspaceScreenshot('Before_Fill_Workspace_Name');
-  await attachScreenshotToAllure(this, beforeScreenshot, 'Before Fill Workspace Name');
-  
   await this.workspacePage.fillWorkspaceDetails(workspaceName);
-  
-  // Take screenshot after filling name
-  const afterScreenshot = await this.workspacePage.captureWorkspaceScreenshot('After_Fill_Workspace_Name');
-  await attachScreenshotToAllure(this, afterScreenshot, 'After Fill Workspace Name');
-  
+
   this.log(`Filled workspace name: ${workspaceName}`);
 });
 
 When('I fill in the workspace description as {string}', async function (description) {
   this.attach(`Filling workspace description: ${description}`, 'text/plain');
-  
-  // Take screenshot before filling description
-  const beforeScreenshot = await this.workspacePage.captureWorkspaceScreenshot('Before_Fill_Description');
-  await attachScreenshotToAllure(this, beforeScreenshot, 'Before Fill Description');
-  
+
   await this.workspacePage.fillWorkspaceDetails(this.workspaceNameToCreate || 'Experiment', description);
-  
-  // Take screenshot after filling description
-  const afterScreenshot = await this.workspacePage.captureWorkspaceScreenshot('After_Fill_Description');
-  await attachScreenshotToAllure(this, afterScreenshot, 'After Fill Description');
-  
   this.log(`Filled workspace description: ${description}`);
 });
 
 When('I submit the workspace creation', async function () {
-  this.attach('Submitting workspace creation', 'text/plain');
-  
-  // Take screenshot before submission
-  const beforeScreenshot = await this.workspacePage.captureWorkspaceScreenshot('Before_Submit_Workspace');
-  await attachScreenshotToAllure(this, beforeScreenshot, 'Before Submit Workspace Creation');
-  
+  this.attach('Submitting workspace creation', 'text/plain'); 
   await this.workspacePage.submitWorkspaceCreation();
-  
-  // Wait for submission to process
   await this.waitForSeconds(2);
-  
-  // Take screenshot after submission
-  const afterScreenshot = await this.workspacePage.captureWorkspaceScreenshot('After_Submit_Workspace');
-  await attachScreenshotToAllure(this, afterScreenshot, 'After Submit Workspace Creation');
-  
   this.log('Submitted workspace creation');
 });
 
@@ -162,18 +133,6 @@ When('I create a new workspace named {string}', async function (workspaceName) {
   this.log(`Created workspace: ${workspaceName}`);
 });
 
-// Screenshot steps
-When('I take a screenshot of the workspaces page', async function () {
-  const screenshot = await this.workspacePage.captureWorkspaceScreenshot('Workspaces_Page_View');
-  await attachScreenshotToAllure(this, screenshot, 'Workspaces Page View');
-  this.log('Captured screenshot of workspaces page');
-});
-
-When('I take a screenshot of the create workspace dialog', async function () {
-  const screenshot = await this.workspacePage.captureWorkspaceScreenshot('Create_Workspace_Dialog');
-  await attachScreenshotToAllure(this, screenshot, 'Create Workspace Dialog');
-  this.log('Captured screenshot of create workspace dialog');
-});
 
 When('I fill in the workspace details step by step', async function () {
   this.attach('Filling workspace details with screenshots', 'text/plain');
@@ -199,39 +158,18 @@ When('I fill in the workspace details step by step', async function () {
   this.log('Filled workspace details step by step with screenshots');
 });
 
-When('I take screenshots before and after each action', async function () {
-  // This is handled by individual steps, just log
-  this.attach('Screenshots are being captured for each action', 'text/plain');
-  this.log('Screenshot capture enabled for all actions');
-});
 
 Then('the workspace {string} should be created successfully', async function (workspaceName) {
   this.attach(`Verifying workspace creation: ${workspaceName}`, 'text/plain');
-  
-  // Wait a moment for the workspace to appear in the list
   await this.waitForSeconds(3);
-  
-  // Take screenshot of the current state
-  const screenshot = await this.workspacePage.captureWorkspaceScreenshot('Workspace_Created_Verification');
-  await attachScreenshotToAllure(this, screenshot, 'Workspace Created Verification');
-  
-  // For now, we'll just log success since the exact verification depends on the UI structure
-  this.attach(`Workspace "${workspaceName}" creation completed`, 'text/plain');
   this.log(`Workspace "${workspaceName}" should be created successfully`);
 });
 
 Then('I should see the workspace {string} in the workspace list', async function (workspaceName) {
   this.attach(`Checking workspace list for: ${workspaceName}`, 'text/plain');
   
-  // Take screenshot of the workspace list
-  const screenshot = await this.workspacePage.captureWorkspaceScreenshot('Workspace_List_View');
-  await attachScreenshotToAllure(this, screenshot, 'Workspace List View');
-  
-  // Try to verify workspace exists
   const workspaceExists = await this.workspacePage.verifyWorkspaceExists(workspaceName);
-  
-  this.attach(`Workspace "${workspaceName}" in list: ${workspaceExists}`, 'text/plain');
-  this.log(`Workspace "${workspaceName}" visibility in list: ${workspaceExists}`);
+  this.attach(`Workspace "${workspaceName}" exists in list as: ${workspaceExists}`, 'text/plain');
 });
 
 Then('I should capture any toast notifications that appear', async function () {

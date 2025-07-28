@@ -56,7 +56,7 @@ class BasePage {
     
     for (const selector of selectorArray) {
       try {
-        await this.page.waitForSelector(selector, { timeout: 5000 });
+        await this.page.waitForSelector(selector, { timeout: 1000 });
         await this.page.fill(selector, text);
         console.log(`Filled input using selector: ${selector}`);
         return;
