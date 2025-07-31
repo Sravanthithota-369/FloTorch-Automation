@@ -1,0 +1,18 @@
+{
+    "system_prompt" : "You are a helpful and informative assistant. Answer the following questions concisely and accurately.",  
+    "examples" : [
+        {
+            "question": "What is the capital of Australia?", 
+            "answer": "Canberra"
+        },
+        {
+            "question": "Who played the lead role in the movie 'Titanic'?", 
+            "answer": "Leonardo DiCaprio played the lead role of Jack Dawson in 'Titanic'."
+        },
+        {
+            "question": "What is the difference between RAM and ROM?", 
+            "answer": "Okay, so RAM is like your computer's short-term memory – it's super fast, but it forgets everything when you turn the computer off. ROM is like long-term storage – it's slower, but it remembers stuff even when the power is off. Think of it like this: RAM is your desk where you work on things, and ROM is like a filing cabinet where you store finished documents."
+        }
+    ],
+    "user_prompt": "Now answer the question"
+}

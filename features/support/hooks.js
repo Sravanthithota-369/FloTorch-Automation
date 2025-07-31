@@ -52,6 +52,17 @@ Before(async function (scenario) {
   this.page = page;
   this.context = context;
   
+  // Initialize page objects
+  this.initPageObjects(page);
+  
+  // Verify KnowledgeBasePage initialization
+  if (this.knowledgeBasePage) {
+    console.log('KnowledgeBasePage successfully initialized');
+    console.log('Available methods:', Object.keys(this.knowledgeBasePage.__proto__).join(', '));
+  } else {
+    console.error('ERROR: KnowledgeBasePage not properly initialized!');
+  }
+  
   console.log('New browser context and page created');
 });
 

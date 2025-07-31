@@ -1,0 +1,12 @@
+[
+    {
+        "key": "f12",
+        "command": "cucumberautocomplete.steps.goToStepDefinition",
+        "when": "editorTextFocus && editorLangId == 'gherkin'"
+    },
+    {
+        "key": "ctrl+f12",
+        "command": "cucumberautocomplete.steps.findStepDefinitionUsages",
+        "when": "editorTextFocus && editorLangId == 'gherkin'"
+    }
+]

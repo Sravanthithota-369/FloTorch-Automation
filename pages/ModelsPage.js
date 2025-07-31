@@ -26,6 +26,14 @@ class ModelsPage extends BasePage {
     this.providersSubmenuSelectors = [
       '//span[text()="Providers"]//ancestor::a'
     ];
+
+    // New Model button selectors
+    this.newModelButtonSelectors = [
+      '//span[text()="New Model"]//ancestor::button',
+      'button:has-text("New Model")',
+      '[aria-label*="New Model"]',
+      'button:has([class*="plus"])'
+    ];
   }
 
   async isModelsSubmenuVisible() {

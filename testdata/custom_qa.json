@@ -1,0 +1,202 @@
+[
+    {
+    "question": "What is Amazon Bedrock?",
+    "answer": "Amazon Bedrock is a fully managed service that makes high-performing foundation models (FMs) from leading AI companies and Amazon available through a unified API."
+    },
+    {
+    "question": "What are the key capabilities of Amazon Bedrock?",
+    "answer": "Key capabilities include experimenting with prompts and configurations, augmenting response generation with data sources, creating applications that reason through customer help, adapting models with training data, improving efficiency with Provisioned Throughput, evaluating different models, and preventing inappropriate content with guardrails."
+    },
+    {
+    "question": "What credentials are needed for programmatic access to Amazon Bedrock?",
+    "answer": "Users need either IAM user credentials, IAM role temporary credentials, or workforce identity credentials managed in IAM Identity Center to access Amazon Bedrock programmatically."
+    },
+    {
+    "question": "How is pricing handled for Amazon Bedrock?",
+    "answer": "Pricing is based on the volume of input tokens and output tokens, and whether you have purchased Provisioned Throughput for the model. You only pay for the services you use."
+    },
+    {
+    "question": "What is a foundation model (FM) in Amazon Bedrock?",
+    "answer": "A foundation model is an AI model with a large number of parameters and trained on massive amounts of diverse data that can generate various responses for a wide range of use cases."
+    },
+    {
+    "question": "What is model inference in Amazon Bedrock?",
+    "answer": "Model inference is the process of a foundation model generating an output (response) from a given input (prompt)."
+    },
+    {
+    "question": "What is a prompt in Amazon Bedrock?",
+    "answer": "A prompt is an input provided to a model to guide it to generate an appropriate response or output, which can include context, examples, or text for the model to use."
+    },
+    {
+    "question": "What is a token in Amazon Bedrock?",
+    "answer": "A token is a sequence of characters that a model can interpret or predict as a single unit of meaning, such as words, parts of words, or punctuation marks."
+    },
+    {
+    "question": "What are inference parameters in Amazon Bedrock?",
+    "answer": "Inference parameters are values that can be adjusted during model inference to influence a response, affecting response variation and limiting response length."
+    },
+    {
+    "question": "What is a playground in Amazon Bedrock?",
+    "answer": "A playground is a user-friendly graphical interface in the AWS Management Console where users can experiment with running model inference to test different models and configurations."
+    },
+    {
+    "question": "What is embedding in Amazon Bedrock?",
+    "answer": "Embedding is the process of condensing information by transforming input into a vector of numerical values to compare similarity between different objects using a shared numerical representation."
+    },
+    {
+    "question": "What is orchestration in Amazon Bedrock?",
+    "answer": "Orchestration is the process of coordinating between foundation models and enterprise data and applications to carry out a task."
+    },
+    {
+    "question": "What is an agent in Amazon Bedrock?",
+    "answer": "An agent is an application that carries out orchestrations through cyclically interpreting inputs and producing outputs by using a foundation model."
+    },
+    {
+    "question": "What is Retrieval Augmented Generation (RAG)?",
+    "answer": "RAG is the process of querying and retrieving information from a data source to augment a generated response to a prompt."
+    },
+    {
+    "question": "What is model customization in Amazon Bedrock?",
+    "answer": "Model customization is the process of using training data to adjust model parameter values in a base model to create a custom model."
+    },
+    {
+    "question": "What are hyperparameters in Amazon Bedrock?",
+    "answer": "Hyperparameters are values that can be adjusted for model customization to control the training process and the output custom model."
+    },
+    {
+    "question": "What is model evaluation in Amazon Bedrock?",
+    "answer": "Model evaluation is the process of evaluating and comparing model outputs to determine the model best suited for a use case."
+    },
+    {
+    "question": "What is Provisioned Throughput in Amazon Bedrock?",
+    "answer": "Provisioned Throughput is a level of throughput purchased for a base or custom model to increase the amount and/or rate of tokens processed during model inference."
+    },
+    {
+    "question": "What AWS tools can be used to access Amazon Bedrock?",
+    "answer": "Amazon Bedrock can be accessed through the AWS Command Line Interface (AWS CLI), AWS SDKs, and Amazon SageMaker AI notebooks."
+    },
+    {
+    "question": "What permissions are needed to request access to foundation models?",
+    "answer": "Users need IAM permissions for aws-marketplace:Subscribe, aws-marketplace:Unsubscribe, and aws-marketplace:ViewSubscriptions actions."
+    },
+    {
+    "question": "How do you modify access to foundation models?",
+    "answer": "Access to foundation models can be modified only through the Amazon Bedrock console by using the Model access page and selecting Modify model access."
+    },
+    {
+    "question": "What is the Converse operation in Amazon Bedrock?",
+    "answer": "Converse is an operation that unifies inference requests across Amazon Bedrock models and simplifies management of multi-turn conversations."
+    },
+    {
+    "question": "What is the InvokeModel operation in Amazon Bedrock?",
+    "answer": "InvokeModel is an operation that lets you submit a prompt to generate a model response."
+    },
+    {
+    "question": "What is the ListFoundationModels operation?",
+    "answer": "ListFoundationModels is an operation that lists the foundation models available in Amazon Bedrock in your region."
+    },
+    {
+    "question": "How is access to Amazon Bedrock models granted?",
+    "answer": "Access to Amazon Bedrock foundation models isn't granted by default and must be requested through the Amazon Bedrock console."
+    },
+    {
+    "question": "What happens after requesting access to a model?",
+    "answer": "After a successful request, the Access status changes to Access granted or Available to request, though changes may take several minutes to be reflected."
+    },
+    {
+    "question": "Can access be removed from all Amazon Bedrock models?",
+    "answer": "No, access cannot be removed from Amazon Titan, Mistral AI, and Meta Llama 3 Instruct models, though inference calls can be prevented through IAM policies."
+    },
+    {
+    "question": "What is required when requesting access to Anthropic models?",
+    "answer": "When requesting access to Anthropic models, users must describe their use case details by submitting a form, and access is granted based on the answers provided."
+    },
+    {
+    "question": "How is billing handled for Amazon Bedrock?",
+    "answer": "Users are charged only for the services they use, with billing viewable through the Billing and Cost Management Dashboard in the AWS console."
+    },
+    {
+    "question": "What is a base model in Amazon Bedrock?",
+    "answer": "A base model is a foundation model that is packaged by a provider and ready to use through Amazon Bedrock."
+    },
+    {
+    "question": "What are model parameters in Amazon Bedrock?",
+    "answer": "Model parameters are values that define a model and its behavior in interpreting input and generating responses, controlled and updated by providers."
+    },
+    {
+    "question": "What security best practice is recommended for AWS account access?",
+    "answer": "As a security best practice, users should assign administrative access to a user and use only the root user to perform tasks that require root user access."
+    },
+    {
+    "question": "What is required for programmatic access to Amazon Bedrock?",
+    "answer": "Programmatic access requires credentials and proper IAM permissions for Amazon Bedrock operations."
+    },
+    {
+    "question": "How can you test Amazon Bedrock API calls?",
+    "answer": "You can test API calls using the AWS CLI, AWS SDKs, or Amazon SageMaker AI notebooks."
+    },
+    {
+    "question": "What happens if you revoke access to a model?",
+    "answer": "When access is revoked, the model can still be accessed through the API for some time while changes propagate, unless an IAM policy is added to immediately deny access."
+    },
+    {
+    "question": "What is required for AWS GovCloud (US) customers to access models?",
+    "answer": "AWS GovCloud (US) customers must use their standard AWS account ID linked to their GovCloud account to first enable model access in us-east-1 or us-west-2."
+    },
+    {
+    "question": "What SDKs are available for Amazon Bedrock?",
+    "answer": "Amazon Bedrock supports multiple SDKs including those for Python, Java, JavaScript, .NET, Go, Ruby, PHP, C++, and others."
+    },
+    {
+    "question": "What is the recommended way to secure AWS account root user?",
+    "answer": "It's recommended to enable multi-factor authentication (MFA) for the root user."
+    },
+    {
+    "question": "How long should access keys be limited to?",
+    "answer": "IAM recommends limiting access keys to 12 hours."
+    },
+    {
+    "question": "What is the purpose of the text playground in Amazon Bedrock?",
+    "answer": "The text playground allows users to experiment with submitting prompts and generating text responses using different models and configurations."
+    },
+    {
+    "question": "What is the purpose of the image playground in Amazon Bedrock?",
+    "answer": "The image playground allows users to experiment with generating images from text prompts using different models and configurations."
+    },
+    {
+    "question": "What regions support Amazon Bedrock?",
+    "answer": "The documentation refers to specific region support information that can be found in the 'Supported foundation models' and 'Feature support by AWS Region' sections."
+    },
+    {
+    "question": "What happens if model access request is successful?",
+    "answer": "If the request is successful, the Access status changes to 'Access granted' or 'Available to request'."
+    },
+    {
+    "question": "What should users review before requesting access to a model?",
+    "answer": "Users should review the End User License Agreement (EULA) for terms and conditions before requesting access to a model."
+    },
+    {
+    "question": "How is model access managed across an AWS account?",
+    "answer": "Once access is provided to a model, it is available for all users in the AWS account."
+    },
+    {
+    "question": "What are the terms that govern the use of Amazon Bedrock foundation models?",
+    "answer": "Use of Amazon Bedrock foundation models is subject to the seller's pricing terms, EULA, and the AWS service terms."
+    },
+    {
+    "question": "What authentication options are available for AWS IAM Identity Center users?",
+    "answer": "IAM Identity Center users can authenticate using temporary credentials to sign programmatic requests to AWS CLI, SDKs, or APIs."
+    },
+    {
+    "question": "What is the recommended operation for multi-turn conversations?",
+    "answer": "The Converse operation is recommended over InvokeModel for multi-turn conversations as it unifies inference requests across models."
+    },
+    {
+    "question": "What should AWS GovCloud users do after enabling model access?",
+    "answer": "After enabling access, AWS GovCloud users should log into their AWS GovCloud account and navigate to Amazon Bedrock in us-gov-west-1 to follow the model access sign-up steps."
+    },
+    {
+    "question": "What are guardrails in Amazon Bedrock?",
+    "answer": "Guardrails are safety features that help prevent the generation of inappropriate, harmful, or biased content by foundation models, allowing organizations to align model outputs with their acceptable use policies."
+    }
+    ]

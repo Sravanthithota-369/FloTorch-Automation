@@ -3,8 +3,11 @@ const LoginPage = require('../../pages/LoginPage');
 const DashboardPage = require('../../pages/DashboardPage');
 const WorkspacePage = require('../../pages/WorkspacePage');
 const ExperimentDashboardPage = require('../../pages/ExperimentDashboardPage');
+const ExperimentPage = require('../../pages/ExperimentPage');
 const ModelsPage = require('../../pages/ModelsPage');
 const ProvidersPage = require('../../pages/ProvidersPage');
+const KnowledgeBasePage = require('../../pages/KnowledgeBasePage');
+const ProjectPage = require('../../pages/ProjectPage');
 
 /**
  * Custom World class that provides access to page objects and common utilities
@@ -37,8 +40,11 @@ class CustomWorld extends World {
     this.dashboardPage = new DashboardPage(page);
     this.workspacePage = new WorkspacePage(page);
     this.experimentDashboardPage = new ExperimentDashboardPage(page);
+    this.experimentPage = new ExperimentPage(page);
     this.modelsPage = new ModelsPage(page);
     this.providersPage = new ProvidersPage(page);
+    this.knowledgeBasePage = new KnowledgeBasePage(page);
+    this.projectPage = new ProjectPage(page);
     
     // For backward compatibility, also set basePage reference
     this.basePage = this.loginPage; // All pages inherit from BasePage

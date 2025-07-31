@@ -125,7 +125,7 @@ class ProvidersPage extends BasePage {
    */
   async fillProviderDetails(providerData) {
     const { name, description, provider, region, accessKey, secretKey } = providerData;
-       
+    await this.page.pause();
     if (name) {
       await this.fillInput(this.providerNameInputSelectors[0], name);
       console.log(`Filled provider name: ${name}`);

@@ -1,0 +1,90 @@
+{
+    "cucumberautocomplete.steps": [
+        "features/step_definitions/*",
+        "features/step_definitions/**/*"
+    ],
+    "cucumberautocomplete.syncfeatures": "features/**/*.feature",
+    "cucumberautocomplete.strictGherkinCompletion": true,
+    "cucumberautocomplete.strictGherkinValidation": true,
+    "cucumberautocomplete.smartSnippets": true,
+    "cucumberautocomplete.stepsInvariants": true,
+    "cucumberautocomplete.skipDocStringsFormat": true,
+    "cucumberautocomplete.onTypeFormat": true,
+    "cucumberautocomplete.formatConfOverride": {
+        "And": 3,
+        "Given": 0,
+        "When": 0,
+        "Then": 0
+    },
+    "cucumberautocomplete.customParameters": [
+        {
+            "parameter": "{string}",
+            "value": "\"[^\"]*\""
+        },
+        {
+            "parameter": "{int}",
+            "value": "\\d+"
+        },
+        {
+            "parameter": "{word}",
+            "value": "[^\\s]+"
+        }
+    ],
+    "files.associations": {
+        "*.feature": "gherkin"
+    },
+    "workbench.editorAssociations": {
+        "*.feature": "default"
+    },
+    "editor.quickSuggestions": {
+        "comments": false,
+        "strings": true,
+        "other": true
+    },
+    "[gherkin]": {
+        "editor.defaultFormatter": "alexkrechik.cucumberautocomplete",
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.suggest.showKeywords": true,
+        "editor.suggest.showSnippets": true
+    },
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "keyword.control.cucumber.table",
+                "settings": {
+                    "foreground": "#569CD6"
+                }
+            },
+            {
+                "scope": "keyword.control.cucumber.scenario",
+                "settings": {
+                    "foreground": "#DCDCAA",
+                    "fontStyle": "bold"
+                }
+            },
+            {
+                "scope": "keyword.control.cucumber.feature",
+                "settings": {
+                    "foreground": "#4EC9B0",
+                    "fontStyle": "bold"
+                }
+            },
+            {
+                "scope": "string.quoted.double.feature",
+                "settings": {
+                    "foreground": "#CE9178"
+                }
+            },
+            {
+                "scope": "keyword.control.cucumber.step",
+                "settings": {
+                    "foreground": "#C586C0",
+                    "fontStyle": "italic"
+                }
+            }
+        ]
+    },
+    "typescript.suggest.autoImports": true,
+    "javascript.suggest.autoImports": true
+}
